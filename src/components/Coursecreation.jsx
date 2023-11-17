@@ -37,14 +37,15 @@ const Coursecreation = () => {
    setIsFormOpen(false);
  };
 
- const toggleFormVisibility = () => {
-  setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
+//  const toggleFormVisibility = () => {
+//   setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
 
-  // Reset the form when closing it
-  if (isFormOpen) {
-    resetFormFields();
-  }
-};
+//   // Reset the form when closing it
+//   if (isFormOpen) {
+//     resetFormFields();
+//   }
+// };
+
   const [formData, setFormData] = useState({
     courseName: '',
     examId: '',
@@ -341,17 +342,27 @@ const handleexams = async (event) => {
       console.log("Deletion canceled.");
     }
   };
+  const openForm = () => {
+    setIsFormOpen(true);
+    if (isFormOpen) {
+          resetFormFields();
+        }
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+    if (isFormOpen) {
+          resetFormFields();
+        }
+  };
+
   return (
     <div>
-        <button onClick={toggleFormVisibility}>
-        {isFormOpen ? (
-          <i className="far fa-circle-xmark"></i>
-        ) : (
-          'Add Course'
-        )}
-      </button>
-
-      {isFormOpen && (
+      {isFormOpen ? (
+        <>
+         <button type="button" onClick={closeForm}>
+         Close Form
+       </button>
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="courseName">Course Name:</label>
@@ -513,6 +524,12 @@ const handleexams = async (event) => {
           </fieldset>
           <button type="submit">Create Course</button>
         </form>
+        </>
+) : (
+  <button type="button" onClick={openForm}>
+    Open Form
+  </button>
+
       )}
 <div className='Create_exam_page'>
 <table>

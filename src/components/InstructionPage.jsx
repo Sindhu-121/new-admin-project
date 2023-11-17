@@ -49,17 +49,20 @@ const InstructionPage = () => {
         }
     }; 
     
-    const toggleForm = () => {
-        setFormOpen(!formOpen);
+    const openForm = () => {
+        setFormOpen(true);
+      };
+    
+      const closeForm = () => {
+        setFormOpen(false);
       };
     return (
         <div>
-             <button type="button" onClick={toggleForm}>
-        {formOpen ? 'Close Form' : 'ADD'}
-      </button>
-
-      {formOpen && (
+      {formOpen ? (
             <form>
+                <button type="button" onClick={closeForm} disabled={!formOpen}>
+        Close Form
+      </button>
             <label>Select Exam:</label>
             <select name="examId"  value={selectedExam}  onChange={(e) => setSelectedExam(e.target.value)} >
                 <option value="">Select Exam:</option>
@@ -85,6 +88,10 @@ const InstructionPage = () => {
                 </button>
             </div>
             </form>
+             ) : (
+                <button type="button" onClick={openForm}>
+                  Open Form
+                </button>
             )}
         </div>
     );
