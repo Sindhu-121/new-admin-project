@@ -6,6 +6,7 @@ import ExamCreation from './components/Examcreation.jsx';
 import Coursecreation from './components/Coursecreation.jsx';
 import Examupdate from './components/Examupdate.jsx'
 import Coureseupdate from './components/Coureseupdate.jsx';
+import InstructionPage from './components/InstructionPage.jsx'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/update/:examId' element={<Examupdate/>} />
         <Route path='Coursecreation' element={<Coursecreation />} />
         <Route path='/courseupdate/:courseCreationId'  element={<Coureseupdate />} />
+        <Route path="/InstructionPage" element={<InstructionPage />} />  
       </Routes>
       </div>
       

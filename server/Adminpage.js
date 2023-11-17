@@ -1,6 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs').promises;
 const app = express();
 const port = 3081;
 
@@ -12,6 +15,20 @@ const db = mysql.createPool({
   password: '',
   database: 'admin_project',
 });
+
+
+const storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const uploadDir = 'uploads/';
+    await fs.mkdir(uploadDir, { recursive: true }); // Create the 'uploads' directory if it doesn't exist
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 //_______________________________________________________________exam creation start_____________________________________________________________________________
 
 //-----------------------------geting subjects in exam creation page ------------------------
@@ -476,7 +493,38 @@ app.get('/courseupdate/:courseCreationId', async (req, res) => {
     }
   });
 //_______________________________________________________________courese creation end _____________________________________________________________________________
+//_______________________________________________________________INSTRUCTION page _____________________________________________________________________________
 
+app.get('/exams', async (req, res) => {
+  try {
+    const query = 'SELECT examId,examName FROM exams'; 
+    const [rows] = await db.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+} )
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    const file = req.file;
+    const fileName = file.originalname;
+    const fileContent = await fs.readFile(file.path, 'utf-8');
+
+    const query =
+      'INSERT INTO instruction (examId, instructionHeading, instructionPoint) VALUES (?, ?, ?)';
+    const values = [req.body.examId, req.body.instructionHeading, fileContent];
+
+    const result = await db.query(query, values);
+    const instructionId = result[0].insertId;
+
+    res.json({ success: true, instructionId, message: 'File uploaded successfully.' });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ success: false, message: 'Failed to upload file.' });
+  }
+});
 
 
 app.listen(port, () => {
