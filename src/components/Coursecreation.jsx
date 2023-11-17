@@ -372,13 +372,6 @@ const Coursecreation = () => {
     }
   };
 
-
-  const openForm = () => {
-    setIsFormOpen(true);
-    if (isFormOpen) {
-      resetFormFields();
-    }
-
   const openForm = () => {
     setIsFormOpen(true);
     if (isFormOpen) {
@@ -394,34 +387,6 @@ const Coursecreation = () => {
       resetFormFields();
     }
   };
-  return (
-    <div className="course_container">
-      <div className="course_container_heder">
-        <h2>courses</h2>
-
-        {/* <div
-          className="Add_Course_btn_container"
-          onClick={toggleFormVisibility}
-        >
-          {isFormOpen ? (
-            <div className="add_course_close">
-              <i className="far fa-circle-xmark"></i>
-            </div>
-          ) : (
-            <button className="Add_Course_btn">Add course</button>
-          )}
-        </div> */}
-
-      </div>
-
-      {isFormOpen ? (
-                 <>
-              
-
-          resetFormFields();
-        }
-  };
-
   return (
     <div>
       {isFormOpen ? (
@@ -622,12 +587,6 @@ const Coursecreation = () => {
    Add course
   </button>
   </div>
-
-  <button type="button" onClick={openForm}>
-    Open Form
-  </button>
-
-
       )}
       <div className="course_exam_page">
         <table>
