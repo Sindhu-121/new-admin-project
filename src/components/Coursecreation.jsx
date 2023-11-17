@@ -45,17 +45,6 @@ const Coursecreation = () => {
       resetFormFields();
     }
   };
-
-//  const toggleFormVisibility = () => {
-//   setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
-
-//   // Reset the form when closing it
-//   if (isFormOpen) {
-//     resetFormFields();
-//   }
-// };
-
-
   const [formData, setFormData] = useState({
     courseName: "",
     examId: "",
@@ -375,26 +364,39 @@ const Coursecreation = () => {
   const openForm = () => {
     setIsFormOpen(true);
     if (isFormOpen) {
-          resetFormFields();
-        }
-
+      resetFormFields();
+    }
   };
 
   const closeForm = () => {
     setIsFormOpen(false);
     if (isFormOpen) {
-
       resetFormFields();
     }
   };
   return (
-    <div>
-      {isFormOpen ? (
-        <>
-         <button type="button" onClick={closeForm}>
-         Close Form
-       </button>
+    <div className="course_container">
+      <div className="course_container_heder">
+        <h2>courses</h2>
 
+        {/* <div
+          className="Add_Course_btn_container"
+          onClick={toggleFormVisibility}
+        >
+          {isFormOpen ? (
+            <div className="add_course_close">
+              <i className="far fa-circle-xmark"></i>
+            </div>
+          ) : (
+            <button className="Add_Course_btn">Add course</button>
+          )}
+        </div> */}
+
+      </div>
+
+      {isFormOpen ? (
+                 <>
+              
         <form onSubmit={handleSubmit}>
 
         <button id="courses_close_btn" type="button" onClick={closeForm}>
@@ -581,12 +583,12 @@ const Coursecreation = () => {
         </>
 ) : (
 
-
   <div className="Add_Course_btn_container">
   <button type="button" onClick={openForm}>
    Add course
   </button>
   </div>
+
       )}
       <div className="course_exam_page">
         <table>
