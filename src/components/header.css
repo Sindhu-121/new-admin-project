@@ -406,12 +406,185 @@
   width: 80%;
   margin: 4rem auto;
 }
- 
-.course_container .Add_Course_btn{
- padding: 0.5rem 2rem; 
- margin: 1rem auto;
+.course_container_heder{
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  align-items: center;
+  margin: 1rem auto;
+  /* flex-direction: column; */
+}
+.course_container .Add_Course_btn_container >button{
+
+  /* display: inline; */
+  background: #3673ce;
+  border: 0;
+  padding:  0.5rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  margin: 0.5rem;
+}
+.course_exam_page  {
+  width: 90%;
+  margin: 0 auto;
+  font-size: 0.9rem;
 }
 
+
+.course_exam_page>table {
+  width: 100%;
+}
+
+.course_exam_page>table,
+.course_exam_page>table td,
+.course_exam_page>table th {
+  /* background: #fffcde; */
+  /* color: #fff; */
+  /* width: 100%; */
+  border: 1px solid #000;
+  border-collapse: collapse;
+  border-spacing: 10px;
+  text-align: center;
+  padding: 0.5rem;
+
+}
+.courseupdate_btn_container{
+  display: flex;
+}
+.courseupdate_btn ,.coursedelte_btn{
+  display: inline;
+  background: #3673ce;
+  border: 0;
+  padding:  0.5rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  margin: 0.5rem;
+}
+.course_container form{
+
+  position: absolute;
+  background: #f7f5f5;
+  box-shadow: 0px 0px 10px rgba(39, 158, 255, 0.822);
+  top: 15%;
+
+
+  /* height: 50vh; */
+  border-radius: 18px;
+  padding: 2rem;
+}
+
+.course_frominput_container{
+  /* display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1rem; */
+  display: flex;
+
+  /* justify-content: center; */
+  gap: 2rem;
+  /* margin: 1rem auto; */
+  align-items: center;
+}
+
+.course_frominput_container>div{
+      /* display: flex; */
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: center;
+}
+.course_frominput_container input, .course_frominput_container select,.course_frominput_containe_discunt input{
+  height: 40px;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: none;
+}
+.course_checkbox_continer_content{
+  display: grid;
+  grid-template-columns: repeat(3,1fr) ;
+}
+.course_checkbox_continer{
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+fieldset{
+  padding: 0.1rem;
+}
+fieldset >legend{
+  margin-left: 10px;
+}
+
+.course_container form button{
+  /* display: inline; */
+  background: #3673ce;
+  border: 0;
+  padding:  0.5rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  margin: 0.5rem;
+}
+
+
+
+.course_frominput_container_discount {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+}
+
+.course_frominput_container_parent{
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill, minmax(100px, 600px));  */
+
+  grid-template-columns: 1fr 1fr ;
+   gap: 1rem;
+}
+.course_frominput_containe_discunt{
+  display: grid;
+  grid-template-columns: 25% 35%;
+}
+
+#courses_close_btn{
+  position: absolute;
+  z-index: 10001;
+  top: 0;
+  right: 0;
+  background: none;
+
+}
+#courses_close_btn i{
+  color: #000;
+  font-size: 20px;
+}
+@media (min-width:300px) and (max-width:1350px) {
+  .course_container{
+    margin: 0;
+  }
+  .course_exam_page>table {
+    width: 100%;
+    /* transform: rotate(90deg); */
+  }
+  .course_exam_page>table,
+  .course_exam_page>table td,
+  .course_exam_page>table th {
+    padding: 0.2rem;
+    font-size: 0.6rem;
+    /* transform: rotate(90deg); */
+  }
+  .course_container form{
+    position: absolute;
+    top: 0;
+    left: 10%;
+    /* transform: scale(0.6); */
+      }
+
+    
+      .courseupdate_btn, .coursedelte_btn {
+font-size: 0.7rem;
+      }
+}
 @media (min-width:300px) and (max-width:950px) {
 
   .mobile_menu {
@@ -470,6 +643,7 @@
       border-radius: 50%;
     }
 
+   
     /* .mobile_menu {
     display: block;
   } */
@@ -530,5 +704,30 @@
     grid-template-columns: 25% 50%;
     gap: 1rem;
   }
+.course_container{
+  margin: 0;
+}
+.course_exam_page>table {
+  width: 100%;
+  /* transform: rotate(90deg); */
+}
+.course_exam_page>table,
+.course_exam_page>table td,
+.course_exam_page>table th {
+  padding: 0.1rem;
+  font-size: 0.4rem;
+  /* transform: rotate(90deg); */
+}
 
+
+.course_container form{
+  position: absolute;
+  top: 0;
+  left: -25%;
+  transform: scale(0.5);
+    }
+
+    .courseupdate_btn, .coursedelte_btn {
+      font-size: 0.5rem;
+            }
 }
