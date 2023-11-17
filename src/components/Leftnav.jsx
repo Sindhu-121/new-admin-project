@@ -27,7 +27,7 @@ const Leftnav = () => {
       <li><Link to="/">Test Creation</Link></li>        
 
       <li><Link to="/InstructionPage" >Instruction</Link></li>
-      <li><Link to="/">Test Creation</Link></li>
+    
 
         
 
