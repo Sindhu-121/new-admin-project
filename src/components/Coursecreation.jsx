@@ -103,6 +103,7 @@ const Coursecreation = () => {
   }, []);
 
 
+
 const handleexams = async (event) => {
   const selectedExamId = event.target.value;
   console.log('Selected Exam ID:', selectedExamId);
@@ -140,6 +141,7 @@ const handleexams = async (event) => {
       });
     }
   };
+  
   const handleQuestionChange = (event, questionTypeId) => {
     const { checked } = event.target;
 
@@ -503,7 +505,7 @@ const handleexams = async (event) => {
               <td>{course.Discount}</td>
               <td>{course.totalPrice}</td>
               <td>
-                <Link to={'/courseupdate/course.courseCreationId'}> <button>
+                <Link to={`/courseupdate/${course.courseCreationId}`}> <button>
                <i class="fa-solid fa-pencil"></i>
                 </button></Link> 
                 <button onClick={() => handleDelete(course.courseCreationId)}>
