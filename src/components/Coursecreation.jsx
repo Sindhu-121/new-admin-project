@@ -13,11 +13,38 @@ const Coursecreation = () => {
   const [subjectsData, setSubjectsData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [courseData, setCourseData] = useState([]);
+  // const [resetForm, setResetForm] = useState(false); 
 
-  const toggleFormVisibility = () => {
-    setIsFormOpen(!isFormOpen);
-  };
+  const resetFormFields = () => {
+    // Reset form fields
+    setFormData({
+      courseName: '',
+      examId: '',
+      typeOfTestId: '',
+      questiontypes: '',
+      courseStartDate: '',
+      courseEndDate: '',
+      cost: '',
+      discount: '',
+      discountAmount: '',
+      totalPrice: '',
+    });
+   // Reset selected subjects and question types
+   setSelectedSubjects([]);
+   setSelectedtypeofQuestion([]);
 
+   // Reset form visibility
+   setIsFormOpen(false);
+ };
+
+ const toggleFormVisibility = () => {
+  setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
+
+  // Reset the form when closing it
+  if (isFormOpen) {
+    resetFormFields();
+  }
+};
   const [formData, setFormData] = useState({
     courseName: '',
     examId: '',
@@ -212,7 +239,16 @@ const handleexams = async (event) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const requiredFields = ['courseName', 'typeOfTestId', 'examId', 'courseStartDate', 'courseEndDate', 'cost', 'discount', 'totalPrice'];
 
+    const isEmptyField = requiredFields.some(field => !formData[field]);
+  
+    if (isEmptyField) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    window.location.reload();
+    resetFormFields();
     // Prepare the data for submission
     const data = {
       ...formData,
@@ -254,9 +290,6 @@ const handleexams = async (event) => {
         const subjectsResult = await subjectsResponse.json();
         console.log('Subjects Result:', subjectsResult);
         console.log(result);
-
-        // Handle success or show a success message to the user
-        // Adjust the condition based on the actual structure of the response
         if (result.success) {
           console.log('Course created successfully');
         } else {
@@ -275,28 +308,37 @@ const handleexams = async (event) => {
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
+  
   const handleDelete = async (courseCreationId) => {
-    try {
-      const response = await fetch(`http://localhost:3081/course_creation_table_Delete/${courseCreationId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+    // Display a confirmation dialog before deleting
+    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+    
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost:3081/course_creation_table_Delete/${courseCreationId}`, {
+          method: 'DELETE',
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const result = await response.json();
+        console.log(result.message);
+        const updatedCourseData = courseData.filter(course => course.courseCreationId !== courseCreationId);
+        console.log('Before:', courseData);
+        console.log('After:', updatedCourseData);
+        setCourseData(updatedCourseData);
+      } catch (error) {
+        console.error('Error deleting course:', error);
       }
-
-      const result = await response.json();
-      console.log(result.message);
-      const updatedCourseData = courseData.filter(course => course.courseCreationId !== courseCreationId);
-      console.log('Before:', courseData);
-      console.log('After:', updatedCourseData);
-      setCourseData(updatedCourseData);
-    } catch (error) {
-      console.error('Error deleting course:', error);
+    } else {
+      // The user canceled the deletion
+      console.log("Deletion canceled.");
     }
   };
   return (
@@ -493,9 +535,9 @@ const handleexams = async (event) => {
           </thead> 
  <tbody>
 
-{courseData.map((course) => (
+{courseData.map((course,index) => (
             <tr key={course.courseCreationId}>
-              <td>{course.courseCreationId}</td>
+              <td>{index + 1}</td>
               <td>{course.courseName}</td>
               <td>{course.typeOfTestName}</td>
               <td>{course.examName}</td>
