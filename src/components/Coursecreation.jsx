@@ -45,17 +45,6 @@ const Coursecreation = () => {
       resetFormFields();
     }
   };
-
-//  const toggleFormVisibility = () => {
-//   setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
-
-//   // Reset the form when closing it
-//   if (isFormOpen) {
-//     resetFormFields();
-//   }
-// };
-
-
   const [formData, setFormData] = useState({
     courseName: "",
     examId: "",
@@ -372,25 +361,16 @@ const Coursecreation = () => {
     }
   };
 
-
   const openForm = () => {
     setIsFormOpen(true);
     if (isFormOpen) {
       resetFormFields();
     }
-
-  const openForm = () => {
-    setIsFormOpen(true);
-    if (isFormOpen) {
-          resetFormFields();
-        }
-
   };
 
   const closeForm = () => {
     setIsFormOpen(false);
     if (isFormOpen) {
-
       resetFormFields();
     }
   };
@@ -417,19 +397,6 @@ const Coursecreation = () => {
       {isFormOpen ? (
                  <>
               
-
-          resetFormFields();
-        }
-  };
-
-  return (
-    <div>
-      {isFormOpen ? (
-        <>
-         <button type="button" onClick={closeForm}>
-         Close Form
-       </button>
-
         <form onSubmit={handleSubmit}>
 
         <button id="courses_close_btn" type="button" onClick={closeForm}>
@@ -616,17 +583,11 @@ const Coursecreation = () => {
         </>
 ) : (
 
-
   <div className="Add_Course_btn_container">
   <button type="button" onClick={openForm}>
    Add course
   </button>
   </div>
-
-  <button type="button" onClick={openForm}>
-    Open Form
-  </button>
-
 
       )}
       <div className="course_exam_page">
