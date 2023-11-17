@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Coureseupdate = () => {
   const { courseCreationId } = useParams();
+  const navigate = useNavigate();
   const [courseName, setCourseName] = useState('');
   const [courseStartDate, setCourseStartDate] = useState('');
   const [courseEndDate, setCourseEndDate] = useState('');
@@ -11,28 +12,24 @@ const Coureseupdate = () => {
   const [discount, setDiscount] = useState('');
   const [totalPrice, setTotalPrice] = useState('');
   const [exams, setExams] = useState([]);
-  const [selectedExam, setSelectedExam] = useState(''); 
+  const [selectedExam, setSelectedExam] = useState('');
   const [typeOfTests, setTypeOfTests] = useState([]);
   const [selectedTypeOfTest, setSelectedTypeOfTest] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [questionTypes, setQuestionTypes] = useState([]);
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState([]);
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:3081/courseupdate/${courseCreationId}`);
-        const courseData = response.data[0]; // Assuming the response is an array with a single object
-    const examsResponse = await axios.get('http://localhost:3081/courese-exams');
-        setExams(examsResponse.data);
-
-        // Fetch type of tests
+        const examsResponse = await axios.get('http://localhost:3081/courese-exams');
         const typeOfTestsResponse = await axios.get('http://localhost:3081/type_of_tests');
         setTypeOfTests(typeOfTestsResponse.data);
-
-
+        const courseData = response.data[0];
+        setExams(examsResponse.data);
         if (courseData) {
           setCourseName(courseData.courseName || '');
           setSelectedExam(courseData.examId !== undefined ? courseData.examId.toString() : '');
@@ -42,7 +39,7 @@ const Coureseupdate = () => {
           setCost(courseData.cost !== undefined ? courseData.cost.toString() : '');
           setDiscount(courseData.Discount !== undefined ? courseData.Discount.toString() : '');
           setTotalPrice(courseData.totalPrice !== undefined ? courseData.totalPrice.toString() : '');
-          
+
         } else {
           console.error('Course data not found.');
         }
@@ -50,7 +47,7 @@ const Coureseupdate = () => {
         console.error('Error fetching course data:', error);
       }
     };
-  
+
     fetchData();
   }, [courseCreationId]);
 
@@ -62,14 +59,12 @@ const Coureseupdate = () => {
           const response = await axios.get(`http://localhost:3081/courese-exam-subjects/${selectedExam}/subjects`);
           setSubjects(response.data);
         } else {
-          // If no exam is selected, clear the subjects
           setSubjects([]);
         }
       } catch (error) {
         console.error('Error fetching subjects:', error);
       }
     };
-
     fetchSubjects();
   }, [selectedExam]);
 
@@ -83,44 +78,11 @@ const Coureseupdate = () => {
         console.error('Error fetching selected subjects:', error);
       }
     };
-  
+
     fetchSelectedSubjects();
   }, [courseCreationId]);
 
-  const handleSubjectCheckboxChange = (subjectId) => {
-    const updatedSubjects = [...selectedSubjects];
-    const index = updatedSubjects.indexOf(subjectId);
-  
-    if (index === -1) {
-      updatedSubjects.push(subjectId);
-    } else {
-      updatedSubjects.splice(index, 1);
-    }
-  
-    setSelectedSubjects(updatedSubjects);
-  };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const handleCalculateTotal = () => {
-    // Assuming cost and discount are numbers
-    const costValue = parseFloat(cost);
-    const discountPercentage = parseFloat(discount);
-
-    if (!isNaN(costValue) && !isNaN(discountPercentage)) {
-      const discountAmount = (costValue * discountPercentage) / 100;
-      const calculatedTotal = costValue - discountAmount;
-      setTotalPrice(calculatedTotal.toFixed(2));
-    } else {
-      setTotalPrice('');
-    }
-  }; 
 
   useEffect(() => {
     const fetchQuestionTypes = async () => {
@@ -134,6 +96,7 @@ const Coureseupdate = () => {
 
     fetchQuestionTypes();
   }, []);
+
 
   useEffect(() => {
     const fetchSelectedQuestionTypes = async () => {
@@ -151,6 +114,9 @@ const Coureseupdate = () => {
     }
   }, [courseCreationId]);
 
+
+
+
   const handleQuestionTypeCheckboxChange = (quesionTypeId) => {
     const updatedSelectedTypes = [...selectedQuestionTypes];
     const index = updatedSelectedTypes.indexOf(quesionTypeId);
@@ -164,8 +130,47 @@ const Coureseupdate = () => {
     setSelectedQuestionTypes(updatedSelectedTypes);
   };
 
+  const handleSubjectCheckboxChange = (subjectId) => {
+    const updatedSubjects = [...selectedSubjects];
+    const index = updatedSubjects.indexOf(subjectId);
 
-  
+    if (index === -1) {
+      updatedSubjects.push(subjectId);
+    } else {
+      updatedSubjects.splice(index, 1);
+    }
+
+    setSelectedSubjects(updatedSubjects);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return '';
+    }
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+
+  const handleCalculateTotal = () => {
+    // Assuming cost and discount are numbers
+    const costValue = parseFloat(cost);
+    const discountPercentage = parseFloat(discount);
+
+    if (!isNaN(costValue) && !isNaN(discountPercentage)) {
+      const discountAmount = (costValue * discountPercentage) / 100;
+      const calculatedTotal = costValue - discountAmount;
+      setTotalPrice(calculatedTotal.toFixed(2));
+    } else {
+      setTotalPrice('');
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -182,9 +187,11 @@ const Coureseupdate = () => {
         discount,
         totalPrice,
       });
-      console.log('Course updated successfully');
+      alert('Course updated successfully');
+      navigate('/Coursecreation');
     } catch (error) {
       console.error('Error updating course:', error);
+      alert('Failed to update course. Please try again.');
     }
   };
 
@@ -231,44 +238,45 @@ const Coureseupdate = () => {
         </select>
       </label>
       <br />
-       <label>
+      <label>
         Select Subjects:
         {subjects.map((subject) => (
           <div key={subject.subjectId}>
             <input
-  type="checkbox"
-  id={`subject-${subject.subjectId}`}
-  value={subject.subjectId}
-  checked={selectedSubjects.includes(subject.subjectId)}
-  onChange={() => handleSubjectCheckboxChange(subject.subjectId)}
-/>
+              type="checkbox"
+              id={`subject-${subject.subjectId}`}
+              value={subject.subjectId}
+              checked={selectedSubjects.includes(subject.subjectId)}
+              onChange={() => handleSubjectCheckboxChange(subject.subjectId)}
+            />
             <label htmlFor={`subject-${subject.subjectId}`}>{subject.subjectName}</label>
           </div>
         ))}
       </label>
       <br />
       <label>
-  Select Type of Questions:
-       {questionTypes.map((type) => (
-        <div key={type.quesionTypeId}>
-          <input
-            type="checkbox"
-            id={`question-type-${type.quesionTypeId}`}
-            value={type.quesionTypeId}
-            checked={selectedQuestionTypes.includes(type.quesionTypeId)}
-            onChange={() => handleQuestionTypeCheckboxChange(type.quesionTypeId)}
-          />
-          <label htmlFor={`question-type-${type.quesionTypeId}`}>{type.typeofQuestion}</label>
-        </div>
-      ))}
-</label>
-<br />
+        Select Type of Questions:
+        {questionTypes.map((type) => (
+          <div key={type.quesionTypeId}>
+            <input
+              type="checkbox"
+              id={`question-type-${type.quesionTypeId}`}
+              value={type.quesionTypeId}
+              checked={selectedQuestionTypes.includes(type.quesionTypeId)}
+              onChange={() => handleQuestionTypeCheckboxChange(type.quesionTypeId)}
+            />
+            <label htmlFor={`question-type-${type.quesionTypeId}`}>{type.typeofQuestion}</label>
+          </div>
+        ))}
+      </label>
+      <br />
       <label>
         Course Start Date:
         <input
           type="date"
           value={formatDate(courseStartDate)}
           onChange={(e) => setCourseStartDate(e.target.value)}
+          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
         />
       </label>
       <br />
@@ -278,10 +286,11 @@ const Coureseupdate = () => {
           type="date"
           value={formatDate(courseEndDate)}
           onChange={(e) => setCourseEndDate(e.target.value)}
+          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
         />
       </label>
       <br />
-          <label>
+      <label>
         Cost:
         <input
           type="number"
@@ -310,7 +319,7 @@ const Coureseupdate = () => {
         <input type="text" value={totalPrice} readOnly />
       </label>
       <br />
-      <button type="submit">Submit</button>
+      <button type="submit">UPDATE COURSE</button>
     </form>
   );
 };

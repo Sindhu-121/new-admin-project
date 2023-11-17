@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './admin.css'
-import SuccessPopup from './SuccessPopup';
+// import SuccessPopup from './SuccessPopup';
 import { Link } from 'react-router-dom';
 // import EditForm from './EditForm';
 function Examcreation() {
@@ -12,7 +12,7 @@ function Examcreation() {
     const [subjects, setSubjects] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
-    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    // const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [examsWithSubjects, setExamsWithSubjects] = useState([]);
   
 
@@ -82,7 +82,7 @@ function Examcreation() {
                 setSubmitting(false);
                 resetForm();
                 window.location.reload();
-                setShowSuccessPopup(true);
+                // setShowSuccessPopup(true);
             })
             .catch(error => {
                 console.error('Error creating exam:', error);
@@ -92,9 +92,9 @@ function Examcreation() {
 
 
 
-    const closeSuccessPopup = () => {
-        setShowSuccessPopup(false);
-    };
+    // const closeSuccessPopup = () => {
+    //     setShowSuccessPopup(false);
+    // };
 
 
 
@@ -199,7 +199,7 @@ function Examcreation() {
         
         <button onClick={() => setFormOpen(true)}><i class="fa-solid fa-plus"></i> Exam</button>
       )}
-      {showSuccessPopup && <SuccessPopup onClose={closeSuccessPopup} />}
+      {/* {showSuccessPopup && <SuccessPopup onClose={closeSuccessPopup} />} */}
             </div>
       {/* ....................................FORM START............................... */}
      
@@ -219,9 +219,9 @@ function Examcreation() {
             </tr>
           </thead>
           <tbody>
-          {examsWithSubjects.map(exam => (
+          {examsWithSubjects.map((exam, index) => (
             <tr key={exam.examId}>
-              <td>{exam.examId}</td>
+              <td>{index + 1}</td>
               <td>{exam.examName}</td>
               <td>{formatDate(exam.startDate)}</td>
               <td>{formatDate(exam.endDate)}</td>
