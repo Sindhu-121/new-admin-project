@@ -12,11 +12,6 @@ const db = mysql.createPool({
   password: '',
   database: 'admin_project',
 });
-
-
-
-
-
 //_______________________________________________________________exam creation start_____________________________________________________________________________
 
 //-----------------------------geting subjects in exam creation page ------------------------
@@ -326,61 +321,160 @@ app.delete('/course_creation_table_Delete/:courseCreationId', async (req, res) =
   }
 });
 
-app.get('/getcoursedata/:courseCreationId', async (req, res) => {
-  const query = `
-    SELECT c.courseName, c.cost, c.Discount, c.totalPrice, c.typeOfTestId, t.typeOfTestName
-    FROM course_creation_table c
-    JOIN type_of_test t ON c.typeOfTestId = t.typeOfTestId
-    WHERE c.courseCreationId = ?;
-  `;
-  const courseCreationId = req.params.courseCreationId;
-  try {
-    const [result] = await db.query(query, [courseCreationId]);
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
+app.get('/courseupdate/:courseCreationId', async (req, res) => {
+    const courseCreationId = req.params.courseCreationId;
+  
+    try {
+      const query = `
+        SELECT cc.*, subjects.subjects AS subjects, questions.quesion_types AS question_types, e.examName, t.typeOfTestName
+        FROM course_creation_table cc
+        LEFT JOIN (
+          SELECT cs.courseCreationId, GROUP_CONCAT(s.subjectName) AS subjects
+          FROM course_subjects cs
+          LEFT JOIN subjects s ON cs.subjectId = s.subjectId
+          GROUP BY cs.courseCreationId
+        ) AS subjects ON cc.courseCreationId = subjects.courseCreationId
+        LEFT JOIN (
+          SELECT ct.courseCreationId, GROUP_CONCAT(q.typeofQuestion) AS quesion_types
+          FROM course_type_of_question ct
+          LEFT JOIN quesion_type q ON ct.quesionTypeId = q.quesionTypeId
+          GROUP BY ct.courseCreationId
+        ) AS questions ON cc.courseCreationId = questions.courseCreationId
+        JOIN exams AS e ON cc.examId = e.examId
+        JOIN type_of_test AS t ON cc.typeOfTestId = t.typeOfTestId
+        WHERE cc.courseCreationId = ?;
+      `;
+  
+      const [course] = await db.query(query, [courseCreationId]);
+  
+      if (!course) {
+        res.status(404).json({ error: 'Course not found' });
+        return;
+      }
+  
+      res.json(course);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+ app.get('/course_subjects/:courseCreationId', async (req, res) => {
+    const courseCreationId = req.params.courseCreationId;
+  
+    try {
+      // Query the database to get selected subjects for the specified courseCreationId
+      const query = `
+        SELECT cs.subjectId
+        FROM course_subjects AS cs
+        WHERE cs.courseCreationId = ?
+      `;
+      const [rows] = await db.query(query, [courseCreationId]);
+  
+      // Send the selected subjects as a JSON response
+      res.json(rows);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
-app.put('/updatecourese/:courseCreationId', async (req, res) => {
-  const { courseCreationId } = req.params;
-  const {
-    courseName,
-    selectedTypeOfTestId,
-    cost,
-    Discount,
-    totalPrice,
-  } = req.body;
+  app.get('/course-type-of-questions/:courseCreationId', async (req, res) => {
+    const courseCreationId = req.params.courseCreationId;
+  
+    try {
+      const query = `
+        SELECT ctoq.quesionTypeId, qt.typeofQuestion
+        FROM course_type_of_question AS ctoq
+        JOIN quesion_type AS qt ON ctoq.quesionTypeId = qt.quesionTypeId
+        WHERE ctoq.courseCreationId = ?
+      `;
+      const [rows] = await db.query(query, [courseCreationId]);
+      res.json(rows);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
-  try {
-    // Update the course details in the database
-    const query = `
+  app.get('/question_types', async (req, res) => {
+    try {
+      const query = 'SELECT * FROM quesion_type'; // Replace with your actual query
+      const [rows] = await db.query(query);
+      res.json(rows);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.put('/update-course/:courseCreationId', async (req, res) => {
+    const courseCreationId = req.params.courseCreationId;
+  
+    const {
+      courseName,
+      selectedExam,
+      selectedTypeOfTest,
+      courseStartDate,
+      courseEndDate,
+      cost,
+      discount,
+      totalPrice,
+    } = req.body;
+  
+    const updateQuery = `
       UPDATE course_creation_table
       SET
         courseName = ?,
-        typeOfTestId = ?,
+        examId = ?,
+        typeOfTestId = ?, 
+        courseStartDate = ?,
+        courseEndDate = ?,
         cost = ?,
-        Discount = ?,
+        Discount = ?,       
         totalPrice = ?
-      WHERE
-        courseCreationId = ?
+      WHERE courseCreationId = ?;
     `;
-    const result = await db.query(query, [courseName, selectedTypeOfTestId, cost, Discount, totalPrice, courseCreationId]);
-    console.log(result);
-    if (result.affectedRows > 0) {
-      // If at least one row is affected, it means the update was successful
-      res.json({ updated: true });
-    } else {
-      res.json({ updated: false });
+  
+    try {
+      await db.query(updateQuery, [
+        courseName,
+        selectedExam,
+        selectedTypeOfTest,
+        courseStartDate,
+        courseEndDate,
+        cost,
+        discount,
+        totalPrice,
+        courseCreationId,
+      ]);
+  
+      // Handle subjects update (assuming course_subjects table has columns courseCreationId and subjectId)
+      const selectedSubjects = req.body.selectedSubjects;
+      const deleteSubjectsQuery = 'DELETE FROM course_subjects WHERE courseCreationId = ?';
+      await db.query(deleteSubjectsQuery, [courseCreationId]);
+  
+      const insertSubjectsQuery = 'INSERT INTO course_subjects (courseCreationId, subjectId) VALUES (?, ?)';
+      for (const subjectId of selectedSubjects) {
+        await db.query(insertSubjectsQuery, [courseCreationId, subjectId]);
+      }
+  
+      // Handle question types update (assuming course_type_of_question table has columns courseCreationId and quesionTypeId)
+      const selectedQuestionTypes = req.body.selectedQuestionTypes;
+      const deleteQuestionTypesQuery = 'DELETE FROM course_type_of_question WHERE courseCreationId = ?';
+      await db.query(deleteQuestionTypesQuery, [courseCreationId]);
+  
+      const insertQuestionTypesQuery = 'INSERT INTO course_type_of_question (courseCreationId, quesionTypeId) VALUES (?, ?)';
+      for (const quesionTypeId of selectedQuestionTypes) {
+        await db.query(insertQuestionTypesQuery, [courseCreationId, quesionTypeId]);
+      }
+  
+      res.json({ message: 'Course updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-  } catch (error) {
-    console.error('Error updating course details:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
+  });
 //_______________________________________________________________courese creation end _____________________________________________________________________________
 
 
