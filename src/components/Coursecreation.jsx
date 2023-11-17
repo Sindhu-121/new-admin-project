@@ -379,20 +379,7 @@ const Coursecreation = () => {
       <div className="course_container_heder">
         <h2>courses</h2>
 
-        {/* <div
-          className="Add_Course_btn_container"
-          onClick={toggleFormVisibility}
-        >
-          {isFormOpen ? (
-            <div className="add_course_close">
-              <i className="far fa-circle-xmark"></i>
-            </div>
-          ) : (
-            <button className="Add_Course_btn">Add course</button>
-          )}
-        </div> */}
-
-      </div>
+      
 
       {isFormOpen ? (
                  <>
@@ -589,7 +576,7 @@ const Coursecreation = () => {
   </button>
   </div>
 
-      )}
+      )}</div>
       <div className="course_exam_page">
         <table>
           <thead>
