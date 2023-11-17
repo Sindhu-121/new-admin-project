@@ -135,9 +135,10 @@ function Examcreation() {
     <div className='create_exam_container'>
          <div className='create_exam_content'>
             <div className='create_exam_header'>
-            <h2>Create Exam</h2>
+            <h2>Exams</h2>
             {formOpen ? (
                 <div className='Create_Exam_from'>
+                  <h2>Create Exam</h2>
                      <form onSubmit={handleSubmit}>
                      <div  className="Create_Exam_from_close" onClick={() => setFormOpen(false)}>
                      <i class="fa-regular fa-circle-xmark"></i>
@@ -207,7 +208,7 @@ function Examcreation() {
       <div className='Create_exam_page'>
         <h2>Exams with Subjects</h2>
 {/* ....................................TABLE START...............................  */}
-        <table className=''>
+        <table >
           <thead>
             <tr>
               <th>Serial no</th>

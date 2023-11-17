@@ -300,11 +300,11 @@ const handleexams = async (event) => {
     }
   };
   return (
-    <div>
-        <button onClick={toggleFormVisibility}>
+    <div className='course_container'>
+        <button  className='' onClick={toggleFormVisibility}>
         {isFormOpen ? (
           <i className="far fa-circle-xmark"></i>
-        ) : (
+        ) : (         
           'Add Course'
         )}
       </button>

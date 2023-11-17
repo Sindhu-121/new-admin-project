@@ -80,31 +80,40 @@ const navigate =useNavigate();
 
 
   return (
-    <div> 
+    <>  
+     <div className='update_Exam_from'>
+     <h2>Update Exam</h2>
     <form onSubmit={hanldesubmit}>
-            
-    <label>
-      Exam Name:
-      <input type="text" value={examName} onChange={e =>setExamName(e.target.value)}/>
-    </label>
+    <div className='formdiv_contaniner'>
+            <label>
+              Exam Name:
+            </label>
+            <input type="text" value={examName} onChange={(e) => setExamName(e.target.value)} />
 
-    <br />
+            </div>
+    
 
-    <label>
-      Start Date:
-      <input type="date" value={formatDate(startDate)} onChange={e =>setStartDate(e.target.value)}/>
-    </label>
+ 
 
-    <br />
+            <div className='formdiv_contaniner'>
+            <label>
+              Start Date:
+              
+            </label>
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
+             </div>
 
-    <label>
-      End Date:
-      <input type="date" value={formatDate(endDate)} onChange={e =>setEndDate(e.target.value)}/>
-    </label>
 
-    <br />
 
-    <label>Subjects:</label>
+             <div className='formdiv_contaniner'>
+           <label>
+              End Date:
+            </label>
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
+
+           </div>
+
+           <form className='formdiv_contaniner'>
     <label>Subjects:</label>
 <ul className="subject-list">
   {subjects.map(subject => (
@@ -120,8 +129,15 @@ const navigate =useNavigate();
     </li>
   ))}
 </ul>
+</form>
     <button type="submit">Update</button>
   </form></div>
+  
+    </>
+  
+
+
+
   )
 }
 
