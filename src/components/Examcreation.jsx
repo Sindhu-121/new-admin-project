@@ -14,7 +14,9 @@ function Examcreation() {
     const [formOpen, setFormOpen] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [examsWithSubjects, setExamsWithSubjects] = useState([]);
+  
 
+    
     const resetForm = () => {
         setExamName('');
         setStartDate('');
@@ -62,7 +64,10 @@ function Examcreation() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitting(true);
-
+        if (!examName || !startDate || !endDate || selectedSubjects.length === 0) {
+          alert('Please fill in all required fields.');
+          return;
+        }
         const examData = {
             examName,
             startDate,
@@ -149,7 +154,7 @@ function Examcreation() {
               Start Date:
               
             </label>
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
              </div>
             
   
@@ -157,7 +162,7 @@ function Examcreation() {
            <label>
               End Date:
             </label>
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
 
            </div>
   

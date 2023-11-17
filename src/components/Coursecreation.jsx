@@ -406,6 +406,7 @@ const handleexams = async (event) => {
                 name="courseStartDate"
                 value={startDate}
                 onChange={handleStartDateChange}
+                min={new Date().toISOString().split('T')[0]}
               />
             </div>
 
@@ -417,6 +418,7 @@ const handleexams = async (event) => {
                 name="courseEndDate"
                 value={endDate}
                 onChange={handleEndDateChange}
+                min={new Date().toISOString().split('T')[0]}
               />
             </div>
           </fieldset>
