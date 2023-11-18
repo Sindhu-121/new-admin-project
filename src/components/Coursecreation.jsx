@@ -37,14 +37,16 @@ const Coursecreation = () => {
     setIsFormOpen(false);
   };
 
-  const toggleFormVisibility = () => {
-    setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
+  // const toggleFormVisibility = () => {
+  //   setIsFormOpen((prevIsFormOpen) => !prevIsFormOpen);
 
-    // Reset the form when closing it
-    if (isFormOpen) {
-      resetFormFields();
-    }
-  };
+  //   // Reset the form when closing it
+  //   if (isFormOpen) {
+  //     resetFormFields();
+  //   }
+  // };
+
+  
   const [formData, setFormData] = useState({
     courseName: "",
     examId: "",

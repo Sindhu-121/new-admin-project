@@ -100,7 +100,7 @@ const navigate =useNavigate();
               Start Date:
               
             </label>
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
+            <input type="date" value={formatDate(startDate)} onChange={(e) => setStartDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
              </div>
 
 
@@ -109,7 +109,7 @@ const navigate =useNavigate();
            <label>
               End Date:
             </label>
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
+            <input type="date" value={formatDate(endDate)} onChange={(e) => setEndDate(e.target.value)} min={new Date().toISOString().split('T')[0]}/>
 
            </div>
 
