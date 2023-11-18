@@ -626,6 +626,23 @@ app.get('/instructionsfeach/:instructionId', async (req, res) => {
 
 //_______________________________________________________________end _____________________________________________________________________________
 
+//_______________________________________________________________TEST CREATION PAGE _____________________________________________________________________________
+
+app.get('/testcourses', async (req, res) => {
+  try {
+    const [ rows ] = await db.query('SELECT courseCreationId,courseName FROM course_creation_table');
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+//_______________________________________________________________end _____________________________________________________________________________
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

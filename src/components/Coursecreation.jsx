@@ -583,7 +583,7 @@ const Coursecreation = () => {
         <table>
           <thead>
             <tr>
-              <th scope="col">Course ID</th>
+              <th scope="col">Serial no</th>
               <th scope="col">Course Name</th>
               <th scope="col">Type of Test</th>
               <th scope="col"> Exam</th>
@@ -635,18 +635,7 @@ const Coursecreation = () => {
                       <i className="fa-regular fa-trash-can"></i>
                     </button>
                   </div>
-                  <Link to={`/courseupdate/${course.courseCreationId}`}>
-                    {" "}
-                    <button className="courseupdate_btn">
-                      <i class="fa-solid fa-pencil"></i>
-                    </button>
-                  </Link>
-                  <button
-                    className="coursedelte_btn"
-                    onClick={() => handleDelete(course.courseCreationId)}
-                  >
-                    <i className="fa-regular fa-trash-can"></i>
-                  </button>
+                
                 </td>
               </tr>
             ))}
