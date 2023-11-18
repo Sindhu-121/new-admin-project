@@ -1,68 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Coureseupdate = () => {
   const { courseCreationId } = useParams();
   const navigate = useNavigate();
-  const [courseName, setCourseName] = useState('');
-  const [courseStartDate, setCourseStartDate] = useState('');
-  const [courseEndDate, setCourseEndDate] = useState('');
-  const [cost, setCost] = useState('');
-  const [discount, setDiscount] = useState('');
-  const [totalPrice, setTotalPrice] = useState('');
+  const [courseName, setCourseName] = useState("");
+  const [courseStartDate, setCourseStartDate] = useState("");
+  const [courseEndDate, setCourseEndDate] = useState("");
+  const [cost, setCost] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
   const [exams, setExams] = useState([]);
-  const [selectedExam, setSelectedExam] = useState('');
+  const [selectedExam, setSelectedExam] = useState("");
   const [typeOfTests, setTypeOfTests] = useState([]);
-  const [selectedTypeOfTest, setSelectedTypeOfTest] = useState('');
+  const [selectedTypeOfTest, setSelectedTypeOfTest] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [questionTypes, setQuestionTypes] = useState([]);
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3081/courseupdate/${courseCreationId}`);
-        const examsResponse = await axios.get('http://localhost:3081/courese-exams');
-        const typeOfTestsResponse = await axios.get('http://localhost:3081/type_of_tests');
+        const response = await axios.get(
+          `http://localhost:3081/courseupdate/${courseCreationId}`
+        );
+        const examsResponse = await axios.get(
+          "http://localhost:3081/courese-exams"
+        );
+        const typeOfTestsResponse = await axios.get(
+          "http://localhost:3081/type_of_tests"
+        );
         setTypeOfTests(typeOfTestsResponse.data);
         const courseData = response.data[0];
         setExams(examsResponse.data);
         if (courseData) {
-          setCourseName(courseData.courseName || '');
-          setSelectedExam(courseData.examId !== undefined ? courseData.examId.toString() : '');
-          setSelectedTypeOfTest(courseData.typeOfTestId !== undefined ? courseData.typeOfTestId.toString() : '');
-          setCourseStartDate(formatDate(courseData.courseStartDate) || '');
-          setCourseEndDate(formatDate(courseData.courseEndDate) || '');
-          setCost(courseData.cost !== undefined ? courseData.cost.toString() : '');
-          setDiscount(courseData.Discount !== undefined ? courseData.Discount.toString() : '');
-          setTotalPrice(courseData.totalPrice !== undefined ? courseData.totalPrice.toString() : '');
-
+          setCourseName(courseData.courseName || "");
+          setSelectedExam(
+            courseData.examId !== undefined ? courseData.examId.toString() : ""
+          );
+          setSelectedTypeOfTest(
+            courseData.typeOfTestId !== undefined
+              ? courseData.typeOfTestId.toString()
+              : ""
+          );
+          setCourseStartDate(formatDate(courseData.courseStartDate) || "");
+          setCourseEndDate(formatDate(courseData.courseEndDate) || "");
+          setCost(
+            courseData.cost !== undefined ? courseData.cost.toString() : ""
+          );
+          setDiscount(
+            courseData.Discount !== undefined
+              ? courseData.Discount.toString()
+              : ""
+          );
+          setTotalPrice(
+            courseData.totalPrice !== undefined
+              ? courseData.totalPrice.toString()
+              : ""
+          );
         } else {
-          console.error('Course data not found.');
+          console.error("Course data not found.");
         }
       } catch (error) {
-        console.error('Error fetching course data:', error);
+        console.error("Error fetching course data:", error);
       }
     };
 
     fetchData();
   }, [courseCreationId]);
 
-
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
         if (selectedExam) {
-          const response = await axios.get(`http://localhost:3081/courese-exam-subjects/${selectedExam}/subjects`);
+          const response = await axios.get(
+            `http://localhost:3081/courese-exam-subjects/${selectedExam}/subjects`
+          );
           setSubjects(response.data);
         } else {
           setSubjects([]);
         }
       } catch (error) {
-        console.error('Error fetching subjects:', error);
+        console.error("Error fetching subjects:", error);
       }
     };
     fetchSubjects();
@@ -71,41 +92,46 @@ const Coureseupdate = () => {
   useEffect(() => {
     const fetchSelectedSubjects = async () => {
       try {
-        const response = await axios.get(`http://localhost:3081/course_subjects/${courseCreationId}`);
-        const selectedSubjectIds = response.data.map((subject) => subject.subjectId);
+        const response = await axios.get(
+          `http://localhost:3081/course_subjects/${courseCreationId}`
+        );
+        const selectedSubjectIds = response.data.map(
+          (subject) => subject.subjectId
+        );
         setSelectedSubjects(selectedSubjectIds);
       } catch (error) {
-        console.error('Error fetching selected subjects:', error);
+        console.error("Error fetching selected subjects:", error);
       }
     };
 
     fetchSelectedSubjects();
   }, [courseCreationId]);
 
-
-
   useEffect(() => {
     const fetchQuestionTypes = async () => {
       try {
-        const response = await axios.get('http://localhost:3081/question_types');
+        const response = await axios.get(
+          "http://localhost:3081/question_types"
+        );
         setQuestionTypes(response.data);
       } catch (error) {
-        console.error('Error fetching question types:', error);
+        console.error("Error fetching question types:", error);
       }
     };
 
     fetchQuestionTypes();
   }, []);
 
-
   useEffect(() => {
     const fetchSelectedQuestionTypes = async () => {
       try {
-        const response = await axios.get(`http://localhost:3081/course-type-of-questions/${courseCreationId}`);
+        const response = await axios.get(
+          `http://localhost:3081/course-type-of-questions/${courseCreationId}`
+        );
         const selectedTypes = response.data.map((type) => type.quesionTypeId);
         setSelectedQuestionTypes(selectedTypes);
       } catch (error) {
-        console.error('Error fetching selected question types:', error);
+        console.error("Error fetching selected question types:", error);
       }
     };
 
@@ -113,9 +139,6 @@ const Coureseupdate = () => {
       fetchSelectedQuestionTypes();
     }
   }, [courseCreationId]);
-
-
-
 
   const handleQuestionTypeCheckboxChange = (quesionTypeId) => {
     const updatedSelectedTypes = [...selectedQuestionTypes];
@@ -145,16 +168,15 @@ const Coureseupdate = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) {
-      return '';
+      return "";
     }
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   };
-
 
   const handleCalculateTotal = () => {
     // Assuming cost and discount are numbers
@@ -166,48 +188,50 @@ const Coureseupdate = () => {
       const calculatedTotal = costValue - discountAmount;
       setTotalPrice(calculatedTotal.toFixed(2));
     } else {
-      setTotalPrice('');
+      setTotalPrice("");
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:3081/update-course/${courseCreationId}`, {
-        courseName,
-        selectedTypeOfTest,
-        selectedExam,
-        selectedSubjects,
-        selectedQuestionTypes,
-        courseStartDate,
-        courseEndDate,
-        cost,
-        discount,
-        totalPrice,
-      });
-      alert('Course updated successfully');
-      navigate('/Coursecreation');
+      await axios.put(
+        `http://localhost:3081/update-course/${courseCreationId}`,
+        {
+          courseName,
+          selectedTypeOfTest,
+          selectedExam,
+          selectedSubjects,
+          selectedQuestionTypes,
+          courseStartDate,
+          courseEndDate,
+          cost,
+          discount,
+          totalPrice,
+        }
+      );
+      alert("Course updated successfully");
+      navigate("/Coursecreation");
     } catch (error) {
-      console.error('Error updating course:', error);
-      alert('Failed to update course. Please try again.');
+      console.error("Error updating course:", error);
+      alert("Failed to update course. Please try again.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Course Name:
+    <div className="couseupdatepage">
+      <form onSubmit={handleSubmit}>
+      <div className="courseupdate_frominput_container">
+        <label> Course Name:</label>
         <input
           type="text"
           value={courseName}
           onChange={(e) => setCourseName(e.target.value)}
         />
-      </label>
-      <br />
-      <label>
-        Select Type of Test:
+      </div>
+      <div className="courseupdate_frominput_container">
+        <label>Select Type of Test:</label>
         <select
           name="typeOfTestId"
           value={selectedTypeOfTest}
@@ -220,11 +244,13 @@ const Coureseupdate = () => {
             </option>
           ))}
         </select>
-      </label>
-      <br />
+      </div>
+      <div className="courseupdate_frominput_container">
       <label>
         Select Exam:
-        <select
+       
+      </label>
+      <select
           name="examId"
           value={selectedExam}
           onChange={(e) => setSelectedExam(e.target.value)}
@@ -236,12 +262,20 @@ const Coureseupdate = () => {
             </option>
           ))}
         </select>
-      </label>
-      <br />
+      </div>
+     
+      <div className="courseupdate_frominput_container">
       <label>
         Select Subjects:
-        {subjects.map((subject) => (
-          <div key={subject.subjectId}>
+      
+      </label>
+
+
+      <div className="courseupdate_frominput_container_checkbox" >
+
+    
+      {subjects.map((subject) => (
+          <div  key={subject.subjectId}>
             <input
               type="checkbox"
               id={`subject-${subject.subjectId}`}
@@ -249,50 +283,75 @@ const Coureseupdate = () => {
               checked={selectedSubjects.includes(subject.subjectId)}
               onChange={() => handleSubjectCheckboxChange(subject.subjectId)}
             />
-            <label htmlFor={`subject-${subject.subjectId}`}>{subject.subjectName}</label>
+            <label htmlFor={`subject-${subject.subjectId}`}>
+              {subject.subjectName}
+            </label>
           </div>
         ))}
-      </label>
-      <br />
-      <label>
+          </div>
+     </div>
+
+      
+     <div className="courseupdate_frominput_container">
+     <label>
         Select Type of Questions:
-        {questionTypes.map((type) => (
+      
+      </label>
+
+      <div className="courseupdate_frominput_container_checkbox" >
+                  
+      {questionTypes.map((type) => (
           <div key={type.quesionTypeId}>
             <input
               type="checkbox"
               id={`question-type-${type.quesionTypeId}`}
               value={type.quesionTypeId}
               checked={selectedQuestionTypes.includes(type.quesionTypeId)}
-              onChange={() => handleQuestionTypeCheckboxChange(type.quesionTypeId)}
+              onChange={() =>
+                handleQuestionTypeCheckboxChange(type.quesionTypeId)
+              }
             />
-            <label htmlFor={`question-type-${type.quesionTypeId}`}>{type.typeofQuestion}</label>
+            <label htmlFor={`question-type-${type.quesionTypeId}`}>
+              {type.typeofQuestion}
+            </label>
           </div>
         ))}
-      </label>
-      <br />
+        </div>
+      </div>
+   
+      <div className="courseupdate_frominput_container">
       <label>
         Course Start Date:
-        <input
+       
+      </label>
+      <input
           type="date"
           value={formatDate(courseStartDate)}
           onChange={(e) => setCourseStartDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
+          min={new Date().toISOString().split("T")[0]} // Set max attribute to today
         />
-      </label>
-      <br />
-      <label>
+</div>
+    
+<div className="courseupdate_frominput_container">
+  
+<label>
         Course End Date:
-        <input
+      
+      </label>
+      <input
           type="date"
           value={formatDate(courseEndDate)}
           onChange={(e) => setCourseEndDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
+          min={new Date().toISOString().split("T")[0]} // Set max attribute to today
         />
-      </label>
-      <br />
-      <label>
+  
+  </div>
+  <div className="courseupdate_frominput_container">
+  <label>
         Cost:
-        <input
+      
+      </label>
+      <input
           type="number"
           value={cost}
           onChange={(e) => {
@@ -300,11 +359,14 @@ const Coureseupdate = () => {
             handleCalculateTotal();
           }}
         />
-      </label>
-      <br />
-      <label>
+  </div>
+    
+  <div className="courseupdate_frominput_container">
+  <label>
         Discount (%):
-        <input
+      
+      </label>
+      <input
           type="number"
           value={discount}
           onChange={(e) => {
@@ -312,15 +374,23 @@ const Coureseupdate = () => {
             handleCalculateTotal();
           }}
         />
-      </label>
-      <br />
-      <label>
+  </div>
+
+     
+  <div className="courseupdate_frominput_container">
+  <label>
         Total Price:
-        <input type="text" value={totalPrice} readOnly />
       </label>
-      <br />
+      <input type="text" value={totalPrice} readOnly />
+
+  </div>
+     
+    
+  
       <button type="submit">UPDATE COURSE</button>
     </form>
+    </div>
+    
   );
 };
 

@@ -451,6 +451,7 @@
 }
 .courseupdate_btn_container{
   display: flex;
+  
 }
 .courseupdate_btn ,.coursedelte_btn{
   display: inline;
@@ -558,7 +559,67 @@ fieldset >legend{
   color: #000;
   font-size: 20px;
 }
-@media (min-width:300px) and (max-width:1350px) {
+
+
+/* --------------------------- couseupdatepage----------------- */
+
+.couseupdatepage{
+ min-width: 30%;
+ height: 80vh;
+  margin: 3rem auto;
+  background: #ebe8e8;
+  padding: 2rem; 
+  border-radius: 18px;
+  box-shadow: 0px 0px 10px rgba(39, 158, 255, 0.822);
+}
+
+.couseupdatepage form{
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.courseupdate_frominput_container{
+display: grid;
+grid-template-columns: 40% 1fr;
+align-items: center;
+  /* flex-direction: column; */
+  /* text-align: center; */
+  
+}
+.courseupdate_frominput_container_checkbox{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  align-items: center;
+}
+.courseupdate_frominput_container_checkbox div{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.courseupdate_frominput_container input, .courseupdate_frominput_container select,.courseupdate_frominput_container input{
+height: 40px;
+border-radius: 8px;
+padding: 0.5rem;
+border: none;
+/* width: 200px; */
+}
+.couseupdatepage form button{
+  background: #3673ce;
+  border: 0;
+  padding:  0.5rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  margin: 0.5rem auto;
+  width: 150px;
+}
+
+
+
+
+@media  (max-width:1350px) {
   .course_container{
     margin: 0;
   }
@@ -591,7 +652,7 @@ font-size: 0.7rem;
         transform: scale(0.8);
           }
 }
-@media (min-width:300px) and (max-width:950px) {
+@media (max-width:1000px) {
 
   .mobile_menu {
     position: fixed;
@@ -753,19 +814,49 @@ font-size: 0.7rem;
   grid-template-columns:  1fr;
   gap: 1rem;
 }
+
+#course_frominput_container_media{
+  display: flex;align-items: center;
+  gap: 0.1rem;
+}
 .course_frominput_container>div {
   /* display: flex; */
   
   grid-template-columns: 1fr 1fr ;
  
 }
+.couseupdatepage{
+width: 100%;
+   /* margin: 3rem auto; */
+   margin: 0;
+   background: #ebe8e8;
+   padding: 2rem; 
+   height: 100vh;
+   /* border-radius: 18px; */
+   box-shadow: 0px 0px 10px rgba(39, 158, 255, 0.822);
+ }
 }
 
-@media (max-width:600px){
+@media (max-width:500px){
   .course_frominput_container {
   display: grid;
+  gap: 0.5rem;
     /* align-items: baseline; */
-   
+  }
+
+.course_exam_page table td,.course_exam_page table th{
+  font-size: 0.2rem;
+}
+
+
+.courseupdate_frominput_container {
+  font-size: 0.6rem;
+}
+.courseupdate_frominput_container  input{
+  height: 30px;
+  font-size: 0.6rem;
 }
 
 }
+
+
