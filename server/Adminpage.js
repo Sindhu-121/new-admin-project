@@ -513,8 +513,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const fileContent = await fs.readFile(file.path, 'utf-8');
 
     const query =
-      'INSERT INTO instruction (examId, instructionHeading, instructionPoint) VALUES (?, ?, ?)';
-    const values = [req.body.examId, req.body.instructionHeading, fileContent];
+      'INSERT INTO instruction (examId, instructionHeading, instructionPoint, documentName) VALUES (?, ?, ?, ?)';
+    const values = [req.body.examId, req.body.instructionHeading, fileContent, fileName];
 
     const result = await db.query(query, values);
     const instructionId = result[0].insertId;
@@ -526,6 +526,36 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
+
+app.get('/instructions', async (req, res) => {
+  try {
+    const query =
+      'SELECT i.instructionId, e.examName, i.instructionHeading, i.documentName FROM instruction i JOIN exams e ON i.examId = e.examId';
+    const [rows] = await db.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+app.delete('/instructions/:instructionId', async (req, res) => {
+  try {
+    const instructionId = req.params.instructionId; // Use directly, don't destructure from params
+    const query = 'DELETE FROM instruction WHERE instructionId = ?';
+    const [result] = await db.query(query, [instructionId]);
+
+    if (result.affectedRows > 0) {
+      res.json({ success: true, message: 'Instruction deleted successfully.' });
+    } else {
+      res.status(404).json({ success: false, message: 'Instruction not found.' });
+    }
+  } catch (error) {
+    console.error('Error deleting instruction:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete instruction.' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

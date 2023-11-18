@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { Link } from "react-router-dom";
 const InstructionPage = () => {
     const [instructionHeading, setInstructionHeading] = useState('');
     const [exams, setExams] = useState([]);
     const [selectedExam, setSelectedExam] = useState('');
     const [file, setFile] = useState(null);
     const [formOpen, setFormOpen] = useState(false);
+    const [instructions,setInstructions] = useState([]);
     useEffect(() => {
         const fetchExams = async () => {
             try {
@@ -18,8 +19,16 @@ const InstructionPage = () => {
         };
 
         fetchExams();
+        fetchInstructions();
     }, []);
-
+    const fetchInstructions = async () => {
+        try {
+          const response = await axios.get('http://localhost:3081/instructions');
+          setInstructions(response.data);
+        } catch (error) {
+          console.error('Error fetching instructions:', error);
+        }
+      };
     const handleFileUpload = (files) => {
         const selectedFile = files[0];
         setFile(selectedFile);
@@ -40,6 +49,7 @@ const InstructionPage = () => {
                 });
                 document.getElementById('fileInput').value = '';
                 alert('File uploaded successfully!');
+                fetchInstructions();
             } else {
                 alert('Please select a file to upload.');
             }
@@ -56,6 +66,18 @@ const InstructionPage = () => {
       const closeForm = () => {
         setFormOpen(false);
       };
+      const handleDelete = async (instructionId) => {
+        try {
+          // Send a request to delete the instruction
+          await axios.delete(`http://localhost:3081/instructions/${instructionId}`);
+          alert('Instruction deleted successfully!');
+          fetchInstructions(); // Fetch updated instructions after deletion
+        } catch (error) {
+          console.error('Error deleting instruction:', error);
+          alert('Failed to delete instruction. Please try again.');
+        }
+      };
+      
     return (
         <div>
       {formOpen ? (
@@ -93,6 +115,37 @@ const InstructionPage = () => {
                   Open Form
                 </button>
             )}
+ <table>
+        <thead>
+          <tr>
+            <th>Serial No</th>
+            <th>Exam Name</th>
+            <th>Instruction Heading</th>
+            <th>Document Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {instructions.map((instruction, index) => (
+            <tr key={instruction.instructionId}>
+              <td>{index + 1}</td>
+              <td>{instruction.examName}</td>
+              <td>{instruction.instructionHeading}</td>
+              <td>{instruction.documentName}</td>
+              <td>
+                <Link to={`/InstructionUpdate/${instruction.instructionId}`}>
+                <button>
+                  Update
+                </button>
+                </Link>
+                <button onClick={() => handleDelete(instruction.instructionId)}>
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
         </div>
     );
 };
