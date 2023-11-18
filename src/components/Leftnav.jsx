@@ -15,7 +15,6 @@ const Leftnav = () => {
 <div className='left_nav_bar_container'>
 <div className={showMenu ? "mobile_menu mobile_menu_non  " :"mobile_menu_non_black "} onClick={() => setshowMenu(!showMenu)}  >
                   <div className={showMenu ? "rotate_right  " :"lines Line_one"}></div>
-                  {/* <div className={showMenu ? "no_lines  " :"lines "}></div> */}
                   <div className={showMenu ? "rotate_left  " :"lines Line_two "}></div>
                   </div>
     <div className={showMenu?"left-nav-bar left-nav-bar_":"left-nav-bar"}>
