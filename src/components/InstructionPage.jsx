@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 const InstructionPage = () => {
     const [instructionHeading, setInstructionHeading] = useState('');
     const [exams, setExams] = useState([]);
@@ -133,11 +133,11 @@ const InstructionPage = () => {
               <td>{instruction.instructionHeading}</td>
               <td>{instruction.documentName}</td>
               <td>
-                <Link to={`/InstructionUpdate/${instruction.instructionId}`}>
+                {/* <Link to={`/InstructionUpdate/${instruction.instructionId}`}>
                 <button>
                   Update
                 </button>
-                </Link>
+                </Link> */}
                 <button onClick={() => handleDelete(instruction.instructionId)}>
                   Delete
                 </button>

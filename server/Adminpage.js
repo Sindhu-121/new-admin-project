@@ -557,6 +557,76 @@ app.delete('/instructions/:instructionId', async (req, res) => {
   }
 });
 
+
+// app.put('/InstructionsUpdate/:instructionId', upload.single('file'), async (req, res) => {
+//   try {
+//     const { instructionId } = req.params;
+//     const { examId, instructionHeading } = req.body;
+//     const file = req.file;
+    
+//     // If a new file is provided, update the document content
+//     let instructionPoint;
+//     const fileContent = file ? await fs.readFile(file.path, 'utf-8') : undefined;
+
+//     if (fileContent) {
+//       instructionPoint = fileContent;
+//     } else {
+//       // Fetch the existing instructionPoint from the database
+//       const fetchQuery = 'SELECT instructionPoint FROM instruction WHERE instructionId = ?';
+//       const [fetchResult] = await db.query(fetchQuery, [instructionId]);
+//       instructionPoint = fetchResult[0].instructionPoint;
+//     }
+
+//     // Construct the SQL query based on whether a new file is provided
+//     const updateQuery = fileContent
+//       ? 'UPDATE instruction SET examId = ?, instructionHeading = ?, documentName = ?, instructionPoint = ? WHERE instructionId = ?'
+//       : 'UPDATE instruction SET examId = ?, instructionHeading = ?, instructionPoint = ? WHERE instructionId = ?';
+
+//     const updateValues = fileContent
+//       ? [examId, instructionHeading, file.originalname, instructionPoint, instructionId]
+//       : [examId, instructionHeading, instructionPoint, instructionId];
+
+//     await db.query(updateQuery, updateValues);
+
+//     // If a new file is provided, delete the old file
+//     if (fileContent) {
+//       await fs.unlink(file.path);
+//     }
+
+//     res.json({ success: true, message: 'Instruction updated successfully.' });
+//   } catch (error) {
+//     console.error('Error updating instruction:', error);
+//     res.status(500).json({ success: false, message: 'Failed to update instruction.' });
+//   }
+// });
+
+
+
+
+app.get('/instructionsfeach/:instructionId', async (req, res) => {
+  try {
+    const { instructionId } = req.params;
+
+    // Query the database to get instruction details
+    const query =
+      'SELECT instructionId, examId, instructionHeading, instructionPoint FROM instruction WHERE instructionId = ?';
+    const [result] = await db.query(query, [instructionId]);
+
+    if (result.length > 0) {
+      const instruction = result[0];
+      res.json(instruction);
+    } else {
+      res.status(404).json({ success: false, message: 'Instruction not found.' });
+    }
+  } catch (error) {
+    console.error('Error fetching instruction details:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch instruction details.' });
+  }
+});
+
+//_______________________________________________________________end _____________________________________________________________________________
+
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
