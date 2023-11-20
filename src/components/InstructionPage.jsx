@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import base64 from 'base64-js';
 // import { Link } from "react-router-dom";
 const InstructionPage = () => {
     const [instructionHeading, setInstructionHeading] = useState('');
@@ -8,6 +9,7 @@ const InstructionPage = () => {
     const [file, setFile] = useState(null);
     const [formOpen, setFormOpen] = useState(false);
     const [instructions,setInstructions] = useState([]);
+    const [instructionPoints, setInstructionPoints] = useState([]);
     useEffect(() => {
         const fetchExams = async () => {
             try {
@@ -20,7 +22,21 @@ const InstructionPage = () => {
 
         fetchExams();
         fetchInstructions();
+        fetchInstructionPoints();
     }, []);
+
+
+    
+  const fetchInstructionPoints = async () => {
+    try {
+      const response = await axios.get('http://localhost:3081/instructionpoint');
+      setInstructionPoints(response.data);
+    } catch (error) {
+      console.error('Error fetching instruction points:', error);
+    }
+  };
+
+
     const fetchInstructions = async () => {
         try {
           const response = await axios.get('http://localhost:3081/instructions');
@@ -142,12 +158,24 @@ const InstructionPage = () => {
                   Delete
                 </button>
               </td>
+              <td>{decodeBase64(instructionPoints[index]?.instructionPoint) || 'N/A'}</td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div></div>
         </div>
     );
 };
 
+function decodeBase64(encodedString) {
+  try {
+    const decodedString = atob(encodedString);
+    return new TextDecoder('utf-8').decode(new TextEncoder().encode(decodedString));
+  } catch (error) {
+    console.error('Error decoding Base64:', error);
+    return 'Unable to decode';
+  }
+}
 export default InstructionPage;

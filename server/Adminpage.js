@@ -505,6 +505,10 @@ app.get('/exams', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 } )
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  next();
+});
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
@@ -542,7 +546,7 @@ app.get('/instructions', async (req, res) => {
 
 app.delete('/instructions/:instructionId', async (req, res) => {
   try {
-    const instructionId = req.params.instructionId; // Use directly, don't destructure from params
+    const instructionId = req.params.instructionId;
     const query = 'DELETE FROM instruction WHERE instructionId = ?';
     const [result] = await db.query(query, [instructionId]);
 
@@ -623,6 +627,16 @@ app.get('/instructionsfeach/:instructionId', async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to fetch instruction details.' });
   }
 });
+
+app.get('/instructionpoint',async(req,res)=>{
+  try{ const query='SELECT instructionPoint FROM instruction';
+  const[row] =await db.query(query);
+  res.json(row);
+  }catch (error) {
+    console.error('Error fetching instruction details:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch instruction details.' });
+  }
+})
 
 //_______________________________________________________________end _____________________________________________________________________________
 

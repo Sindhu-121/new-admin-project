@@ -60,7 +60,6 @@ const Testcreation = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can add your logic here for handling form submission
     console.log('Test Name submitted:', testName);
     console.log('Selected Course:', selectedCourse);
     console.log('Start Date:', startDate);
@@ -125,7 +124,20 @@ const Testcreation = () => {
           <input type="number" value={totalMarks} onChange={handleTotalMarksChange}min="1" />
         </label>
         <br/>
+        <div>
         <label>SECTION</label>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Section</th>
+              <th>No of Question</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table></div>
         <br/>
         <button type="submit">Submit</button>
       </form>
