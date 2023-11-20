@@ -276,7 +276,6 @@ const Coureseupdate = () => {
           type="date"
           value={formatDate(courseStartDate)}
           onChange={(e) => setCourseStartDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
         />
       </label>
       <br />
@@ -286,7 +285,6 @@ const Coureseupdate = () => {
           type="date"
           value={formatDate(courseEndDate)}
           onChange={(e) => setCourseEndDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]} // Set max attribute to today
         />
       </label>
       <br />
