@@ -441,7 +441,7 @@ const Coursecreation = () => {
                 <div>
                   {subjectsData.map((subject) => (
                     <div
-                      className="course_frominput_container"
+                      className="course_frominput_container " id="course_frominput_container_media"
                       key={subject.subjectId}
                     >
                       <input
@@ -470,7 +470,7 @@ const Coursecreation = () => {
               <div className="course_checkbox_continer_content">
                 {typeofQuestion.map((type) => (
                   <div
-                    className="course_checkbox_continer"
+                    className="course_checkbox_continer course_frominput_container_media"
                     key={type.quesionTypeId}
                   >
                     <input
@@ -622,6 +622,17 @@ const Coursecreation = () => {
                 <td>{course.totalPrice}</td>
                 <td>
                   <div className="courseupdate_btn_container">
+
+                  <Link to={`/courseupdate/${course.courseCreationId}`}>
+                    {" "}
+                    <button className="courseupdate_btn">
+                      <i class="fa-solid fa-pencil"></i>
+                    </button>
+                  </Link>
+                  
+                  </div>
+                 <button
+
                     <Link to={`/courseupdate/${course.courseCreationId}`}>
                       {" "}
                       <button className="courseupdate_btn">
@@ -629,13 +640,17 @@ const Coursecreation = () => {
                       </button>
                     </Link>
                     <button
+
                       className="coursedelte_btn"
                       onClick={() => handleDelete(course.courseCreationId)}
                     >
                       <i className="fa-regular fa-trash-can"></i>
                     </button>
+
+
                   </div>
                 
+
                 </td>
               </tr>
             ))}
