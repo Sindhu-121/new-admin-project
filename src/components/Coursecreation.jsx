@@ -72,7 +72,7 @@ const Coursecreation = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Selected Exam:", data);
+        // console.log("Fetched Selected Exam:", data);
         // Now 'data' contains the selected exam details, including examName
       } catch (error) {
         console.error("Error fetching selected exam:", error);
@@ -100,7 +100,7 @@ const Coursecreation = () => {
             : [],
         }));
 
-        console.log("Fetched Course Data:", coursesWithArrays);
+        // console.log("Fetched Course Data:", coursesWithArrays);
         setCourseData(coursesWithArrays);
         // setCourseData(fetchedData);
       } catch (error) {
@@ -189,7 +189,7 @@ const Coursecreation = () => {
       try {
         const response = await fetch("http://localhost:3081/type_of_questions");
         const result = await response.json();
-        console.log("Type of Questions Data:", result); // Add this line to log the data
+        // console.log("Type of Questions Data:", result); // Add this line to log the data
         setTypeofQuestion(result);
       } catch (error) {
         console.error("Error fetching Type of questions:", error);
@@ -583,7 +583,7 @@ const Coursecreation = () => {
         <table>
           <thead>
             <tr>
-              <th scope="col">Course ID</th>
+              <th scope="col">Serial no</th>
               <th scope="col">Course Name</th>
               <th scope="col">Type of Test</th>
               <th scope="col"> Exam</th>
@@ -622,6 +622,7 @@ const Coursecreation = () => {
                 <td>{course.totalPrice}</td>
                 <td>
                   <div className="courseupdate_btn_container">
+
                   <Link to={`/courseupdate/${course.courseCreationId}`}>
                     {" "}
                     <button className="courseupdate_btn">
@@ -631,12 +632,25 @@ const Coursecreation = () => {
                   
                   </div>
                  <button
+
+                    <Link to={`/courseupdate/${course.courseCreationId}`}>
+                      {" "}
+                      <button className="courseupdate_btn">
+                        <i class="fa-solid fa-pencil"></i>
+                      </button>
+                    </Link>
+                    <button
+
                       className="coursedelte_btn"
                       onClick={() => handleDelete(course.courseCreationId)}
                     >
                       <i className="fa-regular fa-trash-can"></i>
                     </button>
-                 
+
+
+                  </div>
+                
+
                 </td>
               </tr>
             ))}

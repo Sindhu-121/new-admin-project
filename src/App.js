@@ -6,8 +6,9 @@ import ExamCreation from './components/Examcreation.jsx';
 import Coursecreation from './components/Coursecreation.jsx';
 import Examupdate from './components/Examupdate.jsx'
 import Coureseupdate from './components/Coureseupdate.jsx';
-import InstructionPage from './components/InstructionPage.jsx'
-
+import InstructionPage from './components/InstructionPage.jsx';
+// import InstructionUpdate from './components/InstructionUpdate.jsx';
+import Testcreation from './components/Testcreation.jsx';
 function App() {
   return (
     <Router>
@@ -20,6 +21,8 @@ function App() {
         <Route path='Coursecreation' element={<Coursecreation />} />
         <Route path='/courseupdate/:courseCreationId'  element={<Coureseupdate />} />
         <Route path="/InstructionPage" element={<InstructionPage />} />  
+        {/* <Route path="/InstructionUpdate/:instructionId" element={<InstructionUpdate />} />  */}
+        <Route path='/Testcreation' element={<Testcreation />}/>
       </Routes>
       </div>
       
