@@ -631,10 +631,9 @@ const Coursecreation = () => {
                   </Link>
                   
                   </div>
-                 <button
+                 
 
-                    <Link to={`/courseupdate/${course.courseCreationId}`}>
-                      {" "}
+                    <Link  to={`/courseupdate/${course.courseCreationId}`}>                    
                       <button className="courseupdate_btn">
                         <i class="fa-solid fa-pencil"></i>
                       </button>
@@ -648,7 +647,7 @@ const Coursecreation = () => {
                     </button>
 
 
-                  </div>
+                
                 
 
                 </td>
